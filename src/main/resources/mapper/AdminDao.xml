@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="me.sunshinenny.base.dao.AdminDao">
+
+    <resultMap type="me.sunshinenny.base.entity.Admin" id="AdminMap">
+        <result property="adminId" column="admin_id" jdbcType="INTEGER"/>
+        <result property="adminName" column="admin_name" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="unitId" column="unit_id" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="AdminMap">
+        select
+          admin_id, admin_name, password, unit_id
+        from achievement.admin
+        where admin_id = #{adminId}
+    </select>
+
+    <!--查询单个-->
+    <select id="login" resultMap="AdminMap">
+        select
+          admin_id, admin_name, password, unit_id
+        from achievement.admin
+        where admin_id = #{adminid} and  password = #{password}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="AdminMap">
+        select
+          admin_id, admin_name, password, unit_id
+        from achievement.admin
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="AdminMap">
+        select
+        admin_id, admin_name, password, unit_id
+        from achievement.admin
+        <where>
+            <if test="adminId != null">
+                and admin_id = #{adminId}
+            </if>
+            <if test="adminName != null and adminName != ''">
+                and admin_name = #{adminName}
+            </if>
+            <if test="password != null and password != ''">
+                and password = #{password}
+            </if>
+            <if test="unitId != null">
+                and unit_id = #{unitId}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="adminId" useGeneratedKeys="true">
+        insert into achievement.admin(admin_name, password, unit_id)
+        values (#{adminName}, #{password}, #{unitId})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="adminId" useGeneratedKeys="true">
+        insert into achievement.admin(admin_name, password, unit_id)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.adminName}, #{entity.password}, #{entity.unitId})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="adminId" useGeneratedKeys="true">
+        insert into achievement.admin(admin_name, password, unit_id)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.adminName}, #{entity.password}, #{entity.unitId})
+        </foreach>
+        on duplicate key update
+        admin_name = values(admin_name) , password = values(password) , unit_id = values(unit_id)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update achievement.admin
+        <set>
+            <if test="adminName != null and adminName != ''">
+                admin_name = #{adminName},
+            </if>
+            <if test="password != null and password != ''">
+                password = #{password},
+            </if>
+            <if test="unitId != null">
+                unit_id = #{unitId},
+            </if>
+        </set>
+        where admin_id = #{adminId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from achievement.admin where admin_id = #{adminId}
+    </delete>
+
+</mapper>

@@ -1,0 +1,89 @@
+# ---------------------- 生产环境配置文件 ----------------------
+# ---------------------- MyBatis ----------------------
+mybatis:
+  mapper-locations: "classpath*:/**/*.xml" # Mapper.xml所在的位置
+  type-aliases-package: demo.spring.demo.dao # entity扫描的包名
+  configuration:
+    # 开启二级缓存
+    cache-enabled: true
+    # DEBUG 输出SQL语句到控制台,根据实际需求开启,和MyBatisPlus、Druid开一个就行
+    # log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+# ---------------------- MyBatis Plus ---------------------
+# 配置详情请见在线文档: https://baomidou.com/config/#logicnotdeletevalue
+mybatis-plus:
+  configuration:
+    # DEBUG 输出日志到控制台
+    # log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    # MyBatis Mapper 所对应的 XML 文件位置,一般使用默认值即可
+    mapperLocations: "classpath*:/mapper/**/*.xml"
+    # 是否开启自动驼峰命名规则（camel case）映射
+    # 即从经典数据库列名 A_COLUMN（下划线命名） 到经典 Java 属性名 aColumn（驼峰命名） 的类似映射。
+    mapUnderscoreToCamelCase: true
+# ---------------------- MyBatis 分页插件 ----------------------
+pagehelper:
+  helperDialect: mysql
+  params: count=countSql
+  reasonable: true
+  supportMethodsArguments: true
+# ---------------------- 数据源配置 ----------------------
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      url: jdbc:mysql://localhost:3306/ccb?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      username: root
+#      password: 123456
+      # 初始化大小，最小，最大
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      # 配置获取连接等待超时的时间
+      max-wait: 60000
+        # DEBUG 打印sql日志
+        # filter:
+        # commons-log:
+        # statement-executable-sql-log-enable: true
+      # statement-log-enabled: true
+      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      time-between-eviction-runs-millis: 60000
+      # 配置一个连接在池中最小生存的时间，单位是毫秒
+      min-evictable-idle-time-millis: 300000
+      # 检测连接是否有效的sql
+      validation-query: SELECT 'x'
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      # PSCache Mysql下建议关闭
+      pool-prepared-statements: false
+      max-pool-prepared-statement-per-connection-size: -1
+      # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+      filters: stat,wall,log4j
+      # 合并多个DruidDataSource的监控数据
+      use-global-data-source-stat: true
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+  #  # ---------------------- Redis 基础配置 ----------------------
+  #  redis:
+  #    # Redis数据库索引（默认为0）
+  #    database: 0
+  #    # Redis服务器地址
+  #    host: 127.0.0.1
+  #    # Redis服务器连接端口
+  #    port: 6379
+  #    # Redis服务器连接密码（默认为空）
+  #    # password=
+  #    # 链接超时时间 单位 ms（毫秒）
+  #    timeout: 3000
+  #    # ---------------------- Redis 线程池设置 ----------------------
+  #    lettuce:
+  #      pool:
+  #        # 连接池最大连接数（使用负值表示没有限制） 默认 8
+  #        max-active: 8
+  #        # 连接池最大阻塞等待时间（使用负值表示没有限制） 默认 -1
+  #        max-wait: -1
+  #        # 连接池中的最大空闲连接 默认 8
+  #        max-idle: 8
+  #        # 连接池中的最小空闲连接 默认 0
+  #        min-idle: 0
+druid:
+  driverClassName: com.mysql.cj.jdbc.Driver

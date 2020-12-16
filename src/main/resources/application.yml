@@ -1,0 +1,9 @@
+spring:
+  profiles:
+    active: dev # 使用开发环境配置
+#    active: prod
+
+# --------------------- 通用配置 --------------------
+# 端口配置
+server:
+  port: 23333
